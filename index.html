@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lemonade PRINTS | Custom 3D Printing & Fabrication Orders</title>
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --main-bg: #000000;
+            --text-white: #ffffff;
+            --accent-yellow: #ffea00;
+            --font-family: 'Aldrich', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --box-bg: #0a0a0a;
+            --box-border: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--main-bg);
+            color: var(--text-white);
+            font-family: var(--font-family);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 1px solid var(--box-border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-white);
+            gap: 15px;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .logo img {
+            height: 45px;
+            transition: var(--transition);
+        }
+
+        .logo:hover img {
+            transform: rotate(-10deg) scale(1.1);
+        }
+
+        .nav-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #aaa;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-yellow);
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .btn-custom {
+            background-color: transparent;
+            color: var(--text-white) !important;
+            padding: 12px 28px;
+            border-radius: 0px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: bold;
+            font-family: var(--font-family);
+            font-size: 14px;
+            text-transform: uppercase;
+            border: 2px solid var(--accent-yellow);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-custom:hover {
+            background-color: var(--accent-yellow);
+            color: #000 !important;
+            box-shadow: 0 0 15px rgba(255, 234, 0, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .btn-custom:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #aaa !important;
+            border: 1px solid var(--box-border);
+            padding: 10px 20px;
+            font-family: var(--font-family);
+            font-size: 13px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            border-color: #888;
+            color: #fff !important;
+        }
+
+        .main-wrapper {
+            flex: 1;
+            padding: 130px 10% 60px;
+            max-width: 1450px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section-header {
+            margin-bottom: 35px;
+            border-left: 5px solid var(--accent-yellow);
+            padding-left: 20px;
+        }
+
+        .section-header h1 {
+            font-size: 2.8rem;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+
+        .section-header p {
+            color: #999;
+            font-size: 1rem;
+            max-width: 800px;
+        }
+
+        .order-layout {
+            display: grid;
+            grid-template-columns: 1.35fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .form-container {
+            background: var(--box-bg);
+            border: 1px solid var(--box-border);
+            padding: 40px;
+            position: relative;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-yellow), transparent);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: var(--accent-yellow);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .form-group label span.hint {
+            color: #666;
+            font-size: 0.75rem;
+            text-transform: none;
+        }
+
+        .form-control {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--box-border);
+            color: var(--text-white);
+            padding: 15px;
+            font-family: var(--font-family);
+            font-size: 0.95rem;
+            transition: 0.3s;
+            border-radius: 0px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-yellow);
+            box-shadow: 0 0 10px rgba(255, 234, 0, 0.2);
+        }
+
+        .contact-pills {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .contact-btn {
+            background: #000;
+            border: 1px solid var(--box-border);
+            color: #888;
+            padding: 12px 10px;
+            text-align: center;
+            font-family: var(--font-family);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-btn i {
+            font-size: 1.2rem;
+        }
+
+        .contact-btn:hover {
+            border-color: #666;
+            color: #fff;
+        }
+
+        .contact-btn.active {
+            border-color: var(--accent-yellow);
+            background: rgba(255, 234, 0, 0.08);
+            color: var(--accent-yellow);
+        }
+
+        .color-selector {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            background: #000;
+            padding: 15px;
+            border: 1px solid var(--box-border);
+        }
+
+        .color-picker-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .native-color-picker {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 44px;
+            height: 44px;
+            background-color: transparent;
+            border: 1px solid var(--box-border);
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .native-color-picker::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .native-color-picker::-webkit-color-swatch {
+            border: none;
+        }
+
+        .swatches {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .swatch {
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            border: 1px solid #444;
+            transition: 0.2s;
+        }
+
+        .swatch:hover, .swatch.active {
+            transform: scale(1.15);
+            border-color: #fff;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+        }
+
+        .order-summary-card {
+            background: var(--box-bg);
+            border: 1px solid var(--box-border);
+            padding: 35px;
+            position: sticky;
+            top: 110px;
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--box-border);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-header h3 {
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-header .badge {
+            background: rgba(255, 234, 0, 0.15);
+            color: var(--accent-yellow);
+            border: 1px solid var(--accent-yellow);
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            text-transform: uppercase;
+        }
+
+        .summary-row {
+            margin-bottom: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #666;
+            letter-spacing: 1px;
+        }
+
+        .summary-val {
+            font-size: 1rem;
+            color: #fff;
+            word-break: break-all;
+        }
+
+        .summary-val.highlight {
+            color: var(--accent-yellow);
+            font-size: 1.5rem;
+        }
+
+        .color-preview-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-dot {
+            width: 14px;
+            height: 14px;
+            border: 1px solid #666;
+            display: inline-block;
+        }
+
+        .status-alert {
+            display: none;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            border: 1px solid transparent;
+        }
+
+        .status-alert.success {
+            display: block;
+            background: rgba(34, 197, 94, 0.1);
+            border-color: #22c55e;
+            color: #86efac;
+        }
+
+        .status-alert.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+            color: #fca5a5;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #0a0a0a;
+            border: 2px solid var(--accent-yellow);
+            width: 100%;
+            max-width: 650px;
+            padding: 40px;
+            box-shadow: 0 0 35px rgba(255, 234, 0, 0.2);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--accent-yellow);
+        }
+
+        footer {
+            background: #000;
+            padding: 40px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--box-border);
+            margin-top: auto;
+        }
+
+        @media (max-width: 950px) {
+            nav { padding: 15px 20px; flex-direction: column; gap: 15px; }
+            .order-layout { grid-template-columns: 1fr; }
+            .main-wrapper { padding: 160px 5% 50px; }
+            .contact-pills { grid-template-columns: repeat(2, 1fr); }
+            footer { flex-direction: column; text-align: center; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">
+            <img src="https://files.cdn-files-a.com/uploads/11893592/400_filter_nobg_69bdafbda24ff.png" alt="Lemonade PRINTS">
+            <span>Lemonade PRINTS</span>
+        </a>
+        <div class="nav-status">
+            <div class="status-dot"></div>
+            <span>Intake Desk Active</span>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <div class="section-header" data-aos="fade-right">
+            <h1>Fabrication Order Intake</h1>
+            <p>Submit your 3D printing project specifications, budget, model links, and material preferences for immediate queue review.</p>
+        </div>
+
+        <div id="statusAlert" class="status-alert"></div>
+
+        <div class="order-layout">
+            <!-- Order Form -->
+            <div class="form-container" data-aos="fade-up">
+                <form id="orderForm" action="https://formspree.io/f/mgavzyjj" method="POST">
+                    
+                    <input type="hidden" name="_subject" id="emailSubject" value="New 3D Print Order Submission">
+                    <input type="hidden" name="_replyto" id="hiddenReplyTo" value="frankie@lemonade-co.site">
+                    <input type="text" name="_gotcha" style="display:none">
+
+                    <div class="form-group">
+                        <label for="clientName">
+                            <span>Your Name / Handle</span>
+                            <span class="hint">Required</span>
+                        </label>
+                        <input type="text" id="clientName" name="Client_Name" class="form-control" placeholder="e.g. John Doe / Alex_Dev" required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="budget">
+                            <span>How Much You're Willing to Pay</span>
+                            <span class="hint">Target Offer</span>
+                        </label>
+                        <input type="text" id="budget" name="Offered_Budget" class="form-control" placeholder="e.g. £25.00 or $30 USD" required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modelLink">
+                            <span>Model or Reference Link</span>
+                            <span class="hint">Printables, Thingiverse, Drive</span>
+                        </label>
+                        <input type="url" id="modelLink" name="Model_File_URL" class="form-control" placeholder="https://www.printables.com/model/..." required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span>Preferred Filament / Print Colour</span>
+                            <span class="hint">Hex or Palette</span>
+                        </label>
+                        <div class="color-selector">
+                            <div class="color-picker-box">
+                                <input type="color" id="nativeColor" class="native-color-picker" value="#ffea00">
+                                <input type="text" id="hexText" name="Requested_Colour" class="form-control" value="#ffea00" style="width: 110px; padding: 10px; text-transform: uppercase;">
+                            </div>
+                            <div class="swatches">
+                                <div class="swatch active" style="background: #ffea00;" data-color="#ffea00" title="Lemonade Yellow"></div>
+                                <div class="swatch" style="background: #00e5ff;" data-color="#00e5ff" title="Cyber Cyan"></div>
+                                <div class="swatch" style="background: #ff1744;" data-color="#ff1744" title="Neon Crimson"></div>
+                                <div class="swatch" style="background: #00e676;" data-color="#00e676" title="Signal Green"></div>
+                                <div class="swatch" style="background: #ffffff;" data-color="#ffffff" title="Pure White"></div>
+                                <div class="swatch" style="background: #111111;" data-color="#111111" title="Stealth Black"></div>
+                                <div class="swatch" style="background: #7c4dff;" data-color="#7c4dff" title="Ultraviolet"></div>
+                                <div class="swatch" style="background: #ff9100;" data-color="#ff9100" title="Hazard Orange"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span>Preferred Way of Contact</span>
+                            <span class="hint" id="contactHint">Select method</span>
+                        </label>
+                        <div class="contact-pills">
+                            <div class="contact-btn active" data-method="Snapchat" data-placeholder="Enter Snapchat Username...">
+                                <i class="fab fa-snapchat"></i>
+                                <span>Snapchat</span>
+                            </div>
+                            <div class="contact-btn" data-method="Phone" data-placeholder="Enter Phone Number / WhatsApp...">
+                                <i class="fas fa-phone-alt"></i>
+                                <span>Phone</span>
+                            </div>
+                            <div class="contact-btn" data-method="Email" data-placeholder="Enter Your Email Address...">
+                                <i class="fas fa-envelope"></i>
+                                <span>Email</span>
+                            </div>
+                            <div class="contact-btn" data-method="Discord" data-placeholder="Enter Discord Username / Tag...">
+                                <i class="fab fa-discord"></i>
+                                <span>Discord</span>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="contactPlatform" name="Contact_Method" value="Snapchat">
+                        <input type="text" id="contactDetail" name="Contact_Handle_or_Number" class="form-control" placeholder="Enter Snapchat Username..." required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projectNotes">
+                            <span>Technical Details & Infill Preferences</span>
+                            <span class="hint">Optional</span>
+                        </label>
+                        <textarea id="projectNotes" name="Project_Notes" class="form-control" style="min-height: 100px; resize: vertical;" placeholder="Specific infill percentage, layer height, timeline urgency, or mechanical tolerances..."></textarea>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn-custom" style="width: 100%; padding: 18px;">
+                        <i class="fas fa-paper-plane"></i>
+                        <span id="btnText">Transmit Order to Review</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Live Slip & Manifest Info -->
+            <div data-aos="fade-left">
+                <div class="order-summary-card">
+                    <div class="summary-header">
+                        <h3>Order Manifest</h3>
+                        <span class="badge" id="badgeStatus">Pending Review</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span class="summary-label">Target Budget / Offer</span>
+                        <span class="summary-val highlight" id="slipBudget">£0.00</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span class="summary-label">Client Name</span>
+                        <span class="summary-val" id="slipName">---</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span class="summary-label">Selected Colour</span>
+                        <span class="summary-val">
+                            <span class="color-preview-indicator">
+                                <span class="color-dot" id="slipColorDot" style="background: #ffea00;"></span>
+                                <span id="slipColorVal">#ffea00</span>
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span class="summary-label">Contact Target</span>
+                        <span class="summary-val" id="slipContact">Snapchat (Awaiting handle)</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span class="summary-label">CAD / File URL</span>
+                        <span class="summary-val" id="slipLink" style="font-size: 0.85rem; color: #888;">No file provided yet</span>
+                    </div>
+
+                    <div class="summary-row" style="border-top: 1px solid var(--box-border); padding-top: 18px; margin-top: 15px;">
+                        <span class="summary-label">Delivery Destination</span>
+                        <span class="summary-val" style="color: var(--accent-yellow); font-size: 0.9rem;">
+                            <i class="fas fa-inbox"></i> Direct Queue Inbox
+                        </span>
+                    </div>
+
+                    <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #222; display: flex; flex-direction: column; gap: 10px;">
+                        <button type="button" class="btn-secondary" onclick="openDirectEmailClient()" style="width: 100%; justify-content: center;">
+                            <i class="fas fa-external-link-alt"></i> Manual Email Client Fallback
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <h2 style="font-size: 2rem; color: var(--accent-yellow); text-transform: uppercase; margin-bottom: 15px;">
+                <i class="fas fa-check-circle"></i> Order Dispatched
+            </h2>
+            <p style="color: #ccc; margin-bottom: 25px;">
+                Your order dossier has been successfully submitted and forwarded to the review queue.
+            </p>
+            <div style="background: #000; border: 1px solid var(--box-border); padding: 20px; margin-bottom: 25px; font-size: 0.85rem;" id="modalSummaryContent">
+            </div>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <button class="btn-custom" onclick="closeModal()">Done</button>
+                <button class="btn-secondary" onclick="copyManifestText()"><i class="fas fa-copy"></i> Copy Order Text</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div>
+            <p style="font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;">Lemonade PRINTS</p>
+            <p style="font-size: 0.75rem; color: #555; margin-top: 5px;">Direct Queue Review Dispatch • Built for Precision</p>
+        </div>
+        <div>
+            <p style="font-size: 0.8rem; color: #777;">Lemonade Core Fabrication Suite</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 600, once: true });
+
+        const form = document.getElementById('orderForm');
+        const clientName = document.getElementById('clientName');
+        const budget = document.getElementById('budget');
+        const modelLink = document.getElementById('modelLink');
+        const nativeColor = document.getElementById('nativeColor');
+        const hexText = document.getElementById('hexText');
+        const contactDetail = document.getElementById('contactDetail');
+        const contactPlatform = document.getElementById('contactPlatform');
+        const projectNotes = document.getElementById('projectNotes');
+        const contactBtns = document.querySelectorAll('.contact-btn');
+        const swatches = document.querySelectorAll('.swatch');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const statusAlert = document.getElementById('statusAlert');
+        const confirmModal = document.getElementById('confirmModal');
+
+        const slipName = document.getElementById('slipName');
+        const slipBudget = document.getElementById('slipBudget');
+        const slipLink = document.getElementById('slipLink');
+        const slipColorDot = document.getElementById('slipColorDot');
+        const slipColorVal = document.getElementById('slipColorVal');
+        const slipContact = document.getElementById('slipContact');
+
+        function updateManifest() {
+            slipName.innerText = clientName.value.trim() || '---';
+            slipBudget.innerText = budget.value.trim() || '£0.00';
+            slipLink.innerText = modelLink.value.trim() || 'No file provided yet';
+            slipColorDot.style.backgroundColor = hexText.value.trim();
+            slipColorVal.innerText = hexText.value.trim();
+            
+            const handle = contactDetail.value.trim();
+            slipContact.innerText = `${contactPlatform.value}: ${handle ? handle : '(Awaiting handle)'}`;
+
+            document.getElementById('emailSubject').value = `New Print Order: [${budget.value.trim() || 'Quote'}] from ${clientName.value.trim() || 'Customer'}`;
+            
+            if (contactPlatform.value === 'Email' && handle.includes('@')) {
+                document.getElementById('hiddenReplyTo').value = handle;
+            } else {
+                document.getElementById('hiddenReplyTo').value = 'frankie@lemonade-co.site';
+            }
+        }
+
+        [clientName, budget, modelLink, contactDetail].forEach(input => {
+            input.addEventListener('input', updateManifest);
+        });
+
+        contactBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                contactBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const method = btn.getAttribute('data-method');
+                const placeholder = btn.getAttribute('data-placeholder');
+                
+                contactPlatform.value = method;
+                contactDetail.placeholder = placeholder;
+                if (method === 'Phone') {
+                    contactDetail.type = 'tel';
+                } else if (method === 'Email') {
+                    contactDetail.type = 'email';
+                } else {
+                    contactDetail.type = 'text';
+                }
+                updateManifest();
+            });
+        });
+
+        nativeColor.addEventListener('input', (e) => {
+            hexText.value = e.target.value.toLowerCase();
+            swatches.forEach(s => s.classList.remove('active'));
+            updateManifest();
+        });
+
+        hexText.addEventListener('input', (e) => {
+            let val = e.target.value;
+            if (!val.startsWith('#')) val = '#' + val;
+            if (/^#[0-9A-F]{6}$/i.test(val)) {
+                nativeColor.value = val;
+            }
+            updateManifest();
+        });
+
+        swatches.forEach(swatch => {
+            swatch.addEventListener('click', () => {
+                swatches.forEach(s => s.classList.remove('active'));
+                swatch.classList.add('active');
+                const col = swatch.getAttribute('data-color');
+                nativeColor.value = col;
+                hexText.value = col;
+                updateManifest();
+            });
+        });
+
+        // Formspree AJAX Submission
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            submitBtn.disabled = true;
+            btnText.innerText = "Transmitting to Review Queue...";
+            statusAlert.className = "status-alert";
+            statusAlert.style.display = "none";
+
+            const payload = new FormData(form);
+
+            try {
+                const response = await fetch('https://formspree.io/f/mgavzyjj', {
+                    method: 'POST',
+                    body: payload,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    showSuccessModal();
+                    form.reset();
+                    updateManifest();
+                } else {
+                    const result = await response.json();
+                    if (result && result.errors && result.errors.length > 0) {
+                        statusAlert.innerText = result.errors.map(err => err.message).join(', ');
+                    } else {
+                        statusAlert.innerText = "Submission error. Opening manual email client...";
+                    }
+                    statusAlert.className = "status-alert error";
+                    statusAlert.style.display = "block";
+                    openDirectEmailClient();
+                }
+            } catch (err) {
+                statusAlert.className = "status-alert error";
+                statusAlert.innerText = "Connection issue. Opening direct mail fallback to frankie@lemonade-co.site...";
+                statusAlert.style.display = "block";
+                openDirectEmailClient();
+            } finally {
+                submitBtn.disabled = false;
+                btnText.innerText = "Transmit Order to Review";
+            }
+        });
+
+        function getManifestText() {
+            return `==============================\n` +
+                   `LEMONADE PRINTS - FABRICATION ORDER\n` +
+                   `==============================\n` +
+                   `Customer: ${clientName.value.trim() || 'N/A'}\n` +
+                   `Budget Offer: ${budget.value.trim() || 'N/A'}\n` +
+                   `Contact Method: ${contactPlatform.value}\n` +
+                   `Contact Detail: ${contactDetail.value.trim() || 'N/A'}\n` +
+                   `Model File Link: ${modelLink.value.trim() || 'N/A'}\n` +
+                   `Preferred Colour: ${hexText.value.trim()}\n` +
+                   `Notes / Specs: ${projectNotes.value.trim() || 'None'}\n` +
+                   `Sent via Lemonade PRINTS Portal\n` +
+                   `==============================`;
+        }
+
+        function openDirectEmailClient() {
+            const subject = encodeURIComponent(`[Lemonade PRINTS Order] ${budget.value.trim() || 'Quote'} - ${clientName.value.trim() || 'Customer'}`);
+            const body = encodeURIComponent(getManifestText());
+            window.location.href = `mailto:frankie@lemonade-co.site?subject=${subject}&body=${body}`;
+        }
+
+        function showSuccessModal() {
+            const container = document.getElementById('modalSummaryContent');
+            container.innerHTML = `
+                <p><strong>Customer:</strong> ${clientName.value.trim() || 'Not specified'}</p>
+                <p><strong>Offered Budget:</strong> ${budget.value.trim() || 'Not specified'}</p>
+                <p><strong>File Link:</strong> <a href="${modelLink.value.trim()}" target="_blank" style="color: var(--accent-yellow);">${modelLink.value.trim() || 'None'}</a></p>
+                <p><strong>Colour:</strong> ${hexText.value.trim()}</p>
+                <p><strong>Contact via ${contactPlatform.value}:</strong> ${contactDetail.value.trim() || 'Not provided'}</p>
+                <p><strong>Status:</strong> Successfully logged in review queue</p>
+            `;
+            confirmModal.classList.add('active');
+        }
+
+        function closeModal() {
+            confirmModal.classList.remove('active');
+        }
+
+        function copyManifestText() {
+            navigator.clipboard.writeText(getManifestText()).then(() => {
+                alert("Order specifications copied to clipboard!");
+            });
+        }
+    </script>
+</body>
+</html>
